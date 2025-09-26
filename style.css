@@ -40,6 +40,7 @@
   padding: 4px 8px;
   cursor: pointer;
   font-size: 14px;
+  margin-left: 4px;
 }
 
 .monokuma-file-header button:hover {
