@@ -1,17 +1,17 @@
-/* Monokuma File UI - style.css */
+/* Monokuma File UI - Editable style */
 
 #monokuma-file-panel {
   position: fixed;
   top: 100px;
   right: 20px;
   z-index: 100000;
-  width: 260px;
+  width: 280px;
   background: #2b2b2b;
   color: #fff;
   border: 2px solid #a00;
   border-radius: 10px;
   box-shadow: 0 0 10px #000;
-  padding: 10px;
+  padding: 12px;
   display: none;
   font-family: sans-serif;
 }
@@ -21,10 +21,21 @@
   font-weight: bold;
   color: #ff4d4d;
   text-align: center;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
-.monokuma-file-body p {
-  margin: 4px 0;
+.monokuma-file-body label {
+  display: block;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.monokuma-file-body input {
+  width: 100%;
+  padding: 4px;
+  border: 1px solid #555;
+  border-radius: 6px;
+  background: #1e1e1e;
+  color: #fff;
   font-size: 14px;
 }
