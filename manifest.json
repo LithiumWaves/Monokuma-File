@@ -1,6 +1,6 @@
 {
   "display_name": "Monokuma File",
-  "loading_order": 40,
+  "loading_order": 60,
   "js": "index.js",
   "css": "style.css",
   "author": "LithiumWaves",
