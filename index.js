@@ -1,4 +1,4 @@
-// Monokuma File UI Extension - index.js
+// Monokuma File UI Extension - Editable version
 (async () => {
   function waitForST() {
     return new Promise((resolve) => {
@@ -14,8 +14,13 @@
 
   await waitForST();
 
-  // State
-  let monokumaFile = null;
+  // State (persisted in localStorage)
+  let monokumaFile = JSON.parse(localStorage.getItem("monokumaFile")) || {
+    victim: "Unknown",
+    location: "Unknown",
+    cause: "Unknown",
+    time: "Unknown"
+  };
 
   // Insert wand button
   function addWandButton() {
@@ -39,24 +44,24 @@
       document.body.appendChild(panel);
     }
 
-    if (!monokumaFile) {
-      monokumaFile = {
-        victim: "Unknown",
-        location: "Unknown",
-        cause: "Unknown",
-        time: "Unknown"
-      };
-    }
-
     panel.innerHTML = `
       <div class="monokuma-file-header">Monokuma File #1</div>
       <div class="monokuma-file-body">
-        <p><b>Victim:</b> ${monokumaFile.victim}</p>
-        <p><b>Location:</b> ${monokumaFile.location}</p>
-        <p><b>Cause of Death:</b> ${monokumaFile.cause}</p>
-        <p><b>Time of Death:</b> ${monokumaFile.time}</p>
+        <label>Victim:<br><input type="text" id="mf-victim" value="${monokumaFile.victim}"></label>
+        <label>Location:<br><input type="text" id="mf-location" value="${monokumaFile.location}"></label>
+        <label>Cause of Death:<br><input type="text" id="mf-cause" value="${monokumaFile.cause}"></label>
+        <label>Time of Death:<br><input type="text" id="mf-time" value="${monokumaFile.time}"></label>
       </div>
     `;
+
+    // Hook inputs
+    ["victim", "location", "cause", "time"].forEach((field) => {
+      const input = panel.querySelector(`#mf-${field}`);
+      input.addEventListener("change", () => {
+        monokumaFile[field] = input.value;
+        localStorage.setItem("monokumaFile", JSON.stringify(monokumaFile));
+      });
+    });
   }
 
   // Toggle
