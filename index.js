@@ -32,7 +32,7 @@
     const btn = document.createElement('div');
     btn.id = 'monokuma-file-btn';
     btn.className = 'menu_button';
-    btn.innerText = '📄 Monokuma Files';
+    btn.innerText = '📄 Mono. File';
     btn.onclick = toggleFilePanel;
     menu.appendChild(btn);
   }
