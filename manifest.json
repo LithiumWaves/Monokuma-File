@@ -1,0 +1,12 @@
+{
+  "display_name": "Monokuma File",
+  "loading_order": 40,
+  "js": "index.js",
+  "css": "style.css",
+  "author": "LithiumWaves",
+  "version": "1.0.0",
+  "homePage": "",
+  "auto_update": false,
+  "minimum_client_version": "1.0.0",
+  "i18n": {}
+}
