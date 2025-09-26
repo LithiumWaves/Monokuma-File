@@ -1,4 +1,4 @@
-// Monokuma File UI Extension - Editable version
+// Monokuma File UI Extension - Multi-file Case Binder
 (async () => {
   function waitForST() {
     return new Promise((resolve) => {
@@ -14,15 +14,17 @@
 
   await waitForST();
 
-  // State (persisted in localStorage)
-  let monokumaFile = JSON.parse(localStorage.getItem("monokumaFile")) || {
-    victim: "Unknown",
-    location: "Unknown",
-    cause: "Unknown",
-    time: "Unknown"
-  };
+  // Load from localStorage
+  let monokumaFiles = JSON.parse(localStorage.getItem("monokumaFiles")) || [
+    { victim: "Unknown", location: "Unknown", cause: "Unknown", time: "Unknown" }
+  ];
+  let currentFile = 0;
 
-  // Insert wand button
+  function saveFiles() {
+    localStorage.setItem("monokumaFiles", JSON.stringify(monokumaFiles));
+  }
+
+  // Add button to wand menu
   function addWandButton() {
     const menu = document.querySelector('#extensionsMenu');
     if (!menu || document.querySelector('#monokuma-file-btn')) return;
@@ -30,12 +32,12 @@
     const btn = document.createElement('div');
     btn.id = 'monokuma-file-btn';
     btn.className = 'menu_button';
-    btn.innerText = '📄 Monokuma File';
+    btn.innerText = '📄 Monokuma Files';
     btn.onclick = toggleFilePanel;
     menu.appendChild(btn);
   }
 
-  // Render panel
+  // Render full panel
   function renderFilePanel() {
     let panel = document.querySelector('#monokuma-file-panel');
     if (!panel) {
@@ -44,27 +46,55 @@
       document.body.appendChild(panel);
     }
 
+    let options = monokumaFiles.map((f, i) => {
+      return `<option value="${i}" ${i === currentFile ? "selected" : ""}>
+        File #${i + 1}
+      </option>`;
+    }).join("");
+
     panel.innerHTML = `
-      <div class="monokuma-file-header">Monokuma File #1</div>
+      <div class="monokuma-file-header">
+        <select id="mf-selector">${options}</select>
+        <button id="mf-new-btn">+ New File</button>
+      </div>
       <div class="monokuma-file-body">
-        <label>Victim:<br><input type="text" id="mf-victim" value="${monokumaFile.victim}"></label>
-        <label>Location:<br><input type="text" id="mf-location" value="${monokumaFile.location}"></label>
-        <label>Cause of Death:<br><input type="text" id="mf-cause" value="${monokumaFile.cause}"></label>
-        <label>Time of Death:<br><input type="text" id="mf-time" value="${monokumaFile.time}"></label>
+        <label>Victim:<br><input type="text" id="mf-victim" value="${monokumaFiles[currentFile].victim}"></label>
+        <label>Location:<br><input type="text" id="mf-location" value="${monokumaFiles[currentFile].location}"></label>
+        <label>Cause of Death:<br><input type="text" id="mf-cause" value="${monokumaFiles[currentFile].cause}"></label>
+        <label>Time of Death:<br><input type="text" id="mf-time" value="${monokumaFiles[currentFile].time}"></label>
       </div>
     `;
+
+    // Dropdown change
+    panel.querySelector('#mf-selector').addEventListener("change", (e) => {
+      currentFile = parseInt(e.target.value, 10);
+      renderFilePanel();
+    });
+
+    // Add new file
+    panel.querySelector('#mf-new-btn').addEventListener("click", () => {
+      monokumaFiles.push({
+        victim: "Unknown",
+        location: "Unknown",
+        cause: "Unknown",
+        time: "Unknown"
+      });
+      currentFile = monokumaFiles.length - 1;
+      saveFiles();
+      renderFilePanel();
+    });
 
     // Hook inputs
     ["victim", "location", "cause", "time"].forEach((field) => {
       const input = panel.querySelector(`#mf-${field}`);
       input.addEventListener("change", () => {
-        monokumaFile[field] = input.value;
-        localStorage.setItem("monokumaFile", JSON.stringify(monokumaFile));
+        monokumaFiles[currentFile][field] = input.value;
+        saveFiles();
       });
     });
   }
 
-  // Toggle
+  // Toggle visibility
   function toggleFilePanel() {
     const panel = document.querySelector('#monokuma-file-panel');
     if (panel && panel.style.display === 'block') {
@@ -75,7 +105,7 @@
     }
   }
 
-  // Add button when extensions menu appears
+  // Inject wand button
   const obs = new MutationObserver(addWandButton);
   obs.observe(document.body, { childList: true, subtree: true });
 })();
