@@ -1,11 +1,11 @@
-/* Monokuma File UI - Editable style */
+/* Monokuma File Binder UI */
 
 #monokuma-file-panel {
   position: fixed;
   top: 100px;
   right: 20px;
   z-index: 100000;
-  width: 280px;
+  width: 300px;
   background: #2b2b2b;
   color: #fff;
   border: 2px solid #a00;
@@ -17,11 +17,33 @@
 }
 
 .monokuma-file-header {
-  font-size: 16px;
-  font-weight: bold;
-  color: #ff4d4d;
-  text-align: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 10px;
+}
+
+.monokuma-file-header select {
+  background: #1e1e1e;
+  color: #fff;
+  border: 1px solid #555;
+  border-radius: 6px;
+  padding: 4px;
+  font-size: 14px;
+}
+
+.monokuma-file-header button {
+  background: #a00;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.monokuma-file-header button:hover {
+  background: #c22;
 }
 
 .monokuma-file-body label {
