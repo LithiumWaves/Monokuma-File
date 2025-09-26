@@ -1,4 +1,4 @@
-// Monokuma File UI Extension - Multi-file Case Binder
+// Monokuma File UI Extension - Multi-file Binder with Delete
 (async () => {
   function waitForST() {
     return new Promise((resolve) => {
@@ -37,7 +37,7 @@
     menu.appendChild(btn);
   }
 
-  // Render full panel
+  // Render panel
   function renderFilePanel() {
     let panel = document.querySelector('#monokuma-file-panel');
     if (!panel) {
@@ -55,7 +55,10 @@
     panel.innerHTML = `
       <div class="monokuma-file-header">
         <select id="mf-selector">${options}</select>
-        <button id="mf-new-btn">+ New File</button>
+        <div>
+          <button id="mf-new-btn">+ New</button>
+          <button id="mf-del-btn">🗑 Delete</button>
+        </div>
       </div>
       <div class="monokuma-file-body">
         <label>Victim:<br><input type="text" id="mf-victim" value="${monokumaFiles[currentFile].victim}"></label>
@@ -82,6 +85,20 @@
       currentFile = monokumaFiles.length - 1;
       saveFiles();
       renderFilePanel();
+    });
+
+    // Delete current file
+    panel.querySelector('#mf-del-btn').addEventListener("click", () => {
+      if (monokumaFiles.length === 1) {
+        alert("You must have at least one file.");
+        return;
+      }
+      if (confirm("Delete this Monokuma File?")) {
+        monokumaFiles.splice(currentFile, 1);
+        currentFile = Math.max(0, currentFile - 1);
+        saveFiles();
+        renderFilePanel();
+      }
     });
 
     // Hook inputs
